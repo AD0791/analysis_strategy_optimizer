@@ -175,3 +175,4 @@ cython_debug/
 .pypirc
 __pycache__
 __pypackages__
+./vscode

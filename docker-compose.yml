@@ -1,0 +1,71 @@
+name: data_analysis_services
+
+services:
+  jupyter:
+    build: .
+    container_name: data_analysis_jupyter
+    ports:
+      - "8888:8888"  # Jupyter Notebook port
+      - "8050:8050"  # Dash app port (if needed)
+    volumes:
+      - .:/app
+      - ./notebooks:/app/notebooks
+    environment:
+      - POSTGRES_HOST=timescaledb
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=analysis
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - JUPYTER_ENABLE_LAB=yes
+    depends_on:
+      - timescaledb
+    command: >
+      jupyter lab 
+      --ip=0.0.0.0 
+      --port=8888 
+      --no-browser 
+      --allow-root 
+      --NotebookApp.token='' 
+      --NotebookApp.password='' 
+      --NotebookApp.allow_origin='*' 
+      --NotebookApp.allow_remote_access=True 
+      --NotebookApp.disable_check_xsrf=True
+    networks:
+      - analysis_network
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg14
+    container_name: data_analysis_timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=analysis
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    networks:
+      - analysis_network
+
+  adminer:
+    image: adminer
+    container_name: data_analysis_adminer
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=timescaledb
+      - ADMINER_DEFAULT_USER=postgres
+      - ADMINER_DEFAULT_PASSWORD=postgres
+      - ADMINER_DEFAULT_DATABASE=analysis
+    depends_on:
+      - timescaledb
+    networks:
+      - analysis_network
+
+networks:
+  analysis_network:
+    driver: bridge
+
+volumes:
+  timescaledb_data:
+  

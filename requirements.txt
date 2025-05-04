@@ -1,0 +1,34 @@
+# Core data analysis packages
+numpy==1.26.4
+pandas==2.2.3
+matplotlib
+plotly==6.0.0
+dash==2.18.2
+dash-bootstrap-components==1.7.1
+jupyterlab
+ipykernel
+
+# Database connectivity
+SQLAlchemy==2.0.39
+psycopg2-binary
+
+# TimescaleDB specific
+#timescaledb-toolkit
+
+# Utilities
+python-dotenv==1.0.1
+tqdm==4.67.1
+openpyxl==3.1.5
+xlrd==2.0.1
+pydantic
+
+# Web dependencies for Dash
+Flask==3.0.3
+Werkzeug==3.0.6
+
+pandas_ta==0.3.14b0
+plotly==6.0.0
+httpx==0.28.1
+pydantic
+pydantic-settings
+requests
